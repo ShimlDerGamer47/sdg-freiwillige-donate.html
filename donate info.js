@@ -119,4 +119,36 @@ document.addEventListener("DOMContentLoaded", () => {
     io.observe(twitchEmbedContainer, { threshold: 0.1 });
   }
   twitchEmbedToken();
+
+  function checkDevice() {
+    const allChildren = [...document.body.children];
+    const warningId = "mobile-warning";
+
+    if (window.innerWidth < 1024) {
+      // Warnung einfügen wenn nicht vorhanden
+      if (!document.getElementById(warningId)) {
+        const warningDiv = document.createElement("div");
+        warningDiv.id = warningId;
+        warningDiv.textContent =
+          "❌ Dieses Overlay ist nur für Desktop-PCs ausgelegt!";
+        document.body.appendChild(warningDiv);
+      }
+      // Alles außer der Warnung verstecken
+      allChildren.forEach((el) => {
+        if (el.id !== warningId) el.style.display = "none";
+      });
+    } else {
+      // Warnung entfernen wenn vorhanden
+      const warningEl = document.getElementById(warningId);
+      if (warningEl) warningEl.remove();
+
+      // Alles wieder sichtbar machen
+      allChildren.forEach((el) => {
+        el.style.display = "";
+      });
+    }
+  }
+
+  checkDevice(); // Direkt beim Laden prüfen
+  window.addEventListener("resize", checkDevice); // Beim Resize prüfen
 });
